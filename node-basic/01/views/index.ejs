@@ -1,12 +1,21 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- include("./partials/head.ejs") %>
+
 <body>
-    <% let name = 'weizhu123' %>
-    <h1 class="test">hello,<%= name %>!</h1>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="blogs content">
+    <h2>All Blogs</h2>
+
+    <% if (blogs.length > 0) { %>
+      <% blogs.forEach(blog => { %>
+        <h3 class="title text-red"><%= blog.title %></h3>
+        <p class="snippet"><%= blog.snippet %></p>
+      <% }) %>
+    <% } else { %>
+      <p>There are no blogs to display...</p>
+    <% } %>
+  </div>
+  <%- include("./partials/footer.ejs") %>
 </body>
 </html>
