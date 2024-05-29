@@ -7,6 +7,9 @@ app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
 
+//配置静态资源文件夹
+app.use(express.static(path.join(__dirname,'/public')));
+
 app.get('/', (req, res) => {
     // res.send('<h1>hello weizhu!</h1>');
     // res.sendFile('./views/index.html',{root:__dirname});
@@ -35,6 +38,7 @@ app.use((req, res) => {
     res.render('404',{title:'404'});
 })
 
-app.use('/public',express.static(path.join(__dirname, '/public')));
+
+
 
 app.listen(3000);
