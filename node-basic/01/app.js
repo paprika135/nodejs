@@ -4,28 +4,26 @@ var morgan = require('morgan');
 const app = express();
 app.set('view engine', 'ejs');
 const mongoose = require('mongoose');
-const uri = "mongodb://localhost:27017/NodeTuts";//本地mongodb地址
-const { Blog } = require('./model/blog');
+const uri = "mongodb://localhost:27017/blogs";//本地mongodb地址
+const { Blog } = require('./model/blog');//blog模型，用于向数据库中添加数据
 
-const testData = new Blog({
-    title:"史记",
-    author:"司马迁"
-});
-
-testData.save().then(res=>{
-    console.log(res);
-});
-
-Blog.findOne({title:"史记"}).then(res=>console.log(res));
 
 //连接数据库
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, dbName: "blogs", user: "weizhu", pass: "ffff0808..+" });
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user:"weizhu",
+    pass:"ffff0808..+"
+});
 const db = mongoose.connection;
+
+
 db.on('error', () => {
     console.log("数据库连接失败");
 })
 db.once('open', () => {
-    console.log("数据库连接成功！")
+    console.log("数据库连接成功！");
+    app.listen(3000);
 })
 
 
@@ -34,6 +32,25 @@ app.use(morgan('dev'));
 
 //配置静态资源文件夹
 app.use(express.static(path.join(__dirname, '/public')));
+
+app.get('/add-blog',(req,res)=>{
+    const blog = new Blog({
+        title:'日记',
+        snippet:"about weizhu's new blog.",
+        body:"我的内心无比强大！"
+    });
+    blog.save().then((result)=>{
+        res.send(result)
+    }).catch(err=>console.log(err))
+});
+
+app.get("/get-all-blogs",(req,res)=>{
+    Blog.find().then((result)=>{
+        res.send(result);
+    }).catch(err=>console.log(err))
+});
+
+ap
 
 app.get('/', (req, res) => {
     // res.send('<h1>hello weizhu!</h1>');
@@ -66,4 +83,3 @@ app.use((req, res) => {
 
 
 
-app.listen(3000);

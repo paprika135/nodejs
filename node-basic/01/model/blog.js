@@ -2,9 +2,19 @@ const mongoose = require("mongoose");
 const {Schema,model} = mongoose;
 
 const blogSchema = new Schema({
-    title:String,
-    author:String
-})
+    title:{
+        type:String,
+        require:true
+    },
+    snippet:{
+        type:String,
+        require:true
+    },
+    body:{
+        type:String,
+        require:true
+    }
+},{timestamps:true})
 
 const Blog = model("blogs",blogSchema)
 
