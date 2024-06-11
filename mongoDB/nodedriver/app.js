@@ -4,6 +4,7 @@ const { ObjectId } = require('mongodb');
 
 const app = express();
 
+
 //json格式解析
 app.use(express.json());
 
@@ -25,8 +26,11 @@ connectToDb((err) => {
 });
 
 app.get('/books', (req, res) => {
+    //实现分页查询，获取查询字符串
+    const page = req.query.page || 0;
+    let booksPerPage = 3;
     const result = [];
-    db.collection('books').find().forEach(book => {
+    db.collection('books').find().skip(page * booksPerPage).limit(booksPerPage).forEach(book => {
         result.push(book);
     }).then(() => {
         res.status(200).json(result);
